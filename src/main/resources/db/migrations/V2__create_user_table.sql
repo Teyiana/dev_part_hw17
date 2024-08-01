@@ -1,0 +1,15 @@
+CREATE TABLE note_user(
+    USER_ID  IDENTITY PRIMARY KEY,
+    USER_NAME VARCHAR(45) NOT NULL,
+    PASSWORD VARCHAR(110) NOT NULL,
+    ROLE VARCHAR(45) NOT NULL,
+    ENABLED BIT DEFAULT 0,
+    CHECK (LENGTH(USER_NAME) > 2),
+    CHECK (LENGTH(PASSWORD) > 9),
+    CHECK (LENGTH(ROLE) > 4)
+);
+
+INSERT INTO note_user (user_name, password, role, enabled)
+VALUES ('user',
+        '$2a$10$sb7CASOF1m2aszI9Cp.7iOFVlJHEm6fPMlAklTjYiEwOMGG99dpkC',
+        'ROLE_USER', 1);

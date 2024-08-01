@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Managing Notes </title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            background-color: dodgerblue;
+            color: white;
+            border-radius: 5px;
+        }
+
+
+        .button:hover {
+            background-color: cornflowerblue;
+        }
+
+        table {
+            border: black 1px solid;
+        }
+
+    </style>
+</head>
+<body>
+<h1> Managing Notes System</h1>
+
+
+<div th:if="${action == 'findAllNotes'}">
+    <h2>All notes</h2>
+
+    <form method="get" action="/list">
+        <label for="notePerPage">Notes per page</label>
+        <select name="max" id="notePerPage" onchange="this.form.submit()">
+            <option th:value="5" th:text="5" th:selected="${max == 5}"></option>
+            <option th:value="10" th:text="10" th:selected="${max == 10}"></option>
+            <option th:value="15" th:text="15" th:selected="${max == 15}"></option>
+        </select>
+        <input type="hidden" name="offset" th:value="${offset}">
+        <br>
+        <br>
+    </form>
+
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Edit</th>
+            <th>Delete</th>
+
+        </tr>
+        <tr th:each="note : ${notes}">
+            <td th:text="${note.id}"></td>
+            <td th:text="${note.title}"></td>
+            <td th:text="${note.content}"></td>
+            <td>
+                <a class="button" th:href="@{/note/edit(id=${note.id})}">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{/note/delete}" th:method="post">
+                    <input type="number" th:value="${note.id}" name="id" hidden="true">
+                    <button type="submit" class="button">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${action == 'edit'}">
+
+    <form th:action="@{/note/edit}" th:method="post">
+        <label th:text="${note.id}"></label>
+        <input type="number" th:value="${note.id}" name="id" hidden="true">
+        <input type="text" th:value="${note.title}" name="title">
+        <input type="text" th:value="${note.content}" name="content">
+        <button type="reset" class="button">Cancel</button>
+        <button type="submit" class="button">Save</button>
+    </form>
+</div>
+
+
+</body>
+</html>
